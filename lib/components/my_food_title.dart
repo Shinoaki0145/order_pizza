@@ -30,7 +30,7 @@ class FoodTitle extends StatelessWidget {
                         style: const TextStyle(fontSize: 18),
                       ),
                       Text(
-                        food.price.toString() + '\$',
+                        '${food.price.toString()}\$',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 10),
