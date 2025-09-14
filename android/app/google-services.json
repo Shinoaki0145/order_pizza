@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "921595841854",
+    "project_id": "order-pizza-dfdfe",
+    "storage_bucket": "order-pizza-dfdfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921595841854:android:795bb3d489db6e17a9b06f",
+        "android_client_info": {
+          "package_name": "com.example.order_pizza"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXE-MOr4k7ibYIJDihebGNTkvAmbn3Q64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:order_pizza/models/cart_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'food.dart';
 
@@ -244,28 +246,56 @@ class Restaurant extends ChangeNotifier {
   // generate a receipt
   String displayCartReceipt() {
     final receipt = StringBuffer();
+    final receiptData = {};
+
     receipt.writeln("Order summary");
     receipt.writeln("--------------");
 
     String formattedDate =
-        DateFormat('yyyy-MM-dd HH::mm::ss').format(DateTime.now());
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     receipt.writeln(formattedDate);
+    receiptData['Date'] = formattedDate;
     receipt.writeln("");
     receipt.writeln("--------------");
 
+    final items = [];
     for (final cartItem in _cart) {
       receipt.writeln(
           "${cartItem.quantity}x ${cartItem.food.name} - ${_formatMoney(cartItem.food.price)}");
+      final item = {
+        'quantity' : cartItem.quantity,
+        'food-name' : cartItem.food.name,
+        'food-price' : cartItem.food.price,
+      };
       if (cartItem.selectedAddons.isNotEmpty) {
         receipt.writeln("  Add ons: ${_formatAddons(cartItem.selectedAddons)}");
+        final addons = [];
+        for (final addon in cartItem.selectedAddons) {
+          addons.add({
+            'name' : addon.name,
+            'price' : addon.price,
+          });
+        }
+        item['add-on'] = addons;
       }
       receipt.writeln("");
+      items.add(item);
     }
+    receiptData['items'] = items;
 
     receipt.writeln("--------------");
     receipt.writeln();
     receipt.writeln("Total Items: ${getTotalItemsInCart()}");
     receipt.writeln("Total Price: ${_formatMoney(totalPrice)}");
+    receiptData['Total-Items'] = getTotalItemsInCart();
+    receiptData['Total-Price'] = totalPrice;
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      FirebaseFirestore.instance.collection("receipts").doc(userId).update({
+        DateTime.now().millisecondsSinceEpoch.toRadixString(16) : receiptData,
+      });
+    }
 
     return receipt.toString();
   }
