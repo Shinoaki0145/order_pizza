@@ -14,7 +14,7 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      splashColor: Colors.white.withOpacity(0.3), // Hiệu ứng splash khi nhấn
+      splashColor: Colors.white30, // Hiệu ứng splash khi nhấn
       highlightColor: Colors.transparent, // Loại bỏ highlight màu mặc định
       borderRadius: BorderRadius.circular(8), // Giữ radius của container
       child: Container(

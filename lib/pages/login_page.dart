@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_button.dart';
 import 'package:order_pizza/components/my_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +18,50 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void login() {
+  Future<void> login() async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      messenger.showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        messenger.showSnackBar(
+            const SnackBar(content: Text("No user found for that email"))
+        );
+        return;
+      }
+      else if (e.code == 'invalid-email') {
+        messenger.showSnackBar(
+            const SnackBar(content: Text("Invalid email"))
+        );
+        return;
+      }
+      else if (e.code == 'wrong-password') {
+        messenger.showSnackBar(
+            const SnackBar(content: Text("Wrong password"))
+        );
+        return;
+      }
+      else if (e.code == 'invalid-credential') {
+        messenger.showSnackBar(
+          const SnackBar(content: Text("Wrong email or password"))
+        );
+        return;
+      }
+    }
+
+    if (!context.mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
