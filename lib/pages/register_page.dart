@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
+import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTag;
@@ -15,8 +15,41 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  void signUp() {
+    // Basic validation (you can expand this as needed)
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Passwords do not match")),
+      );
+      return;
+    }
+
+    // Simulate successful sign-up (replace with actual authentication logic)
+    // For example, you might call an API here
+
+    // Navigate back to LoginPage by toggling the state
+    if (widget.onTag != null) {
+      widget.onTag!(); // This toggles to LoginPage via LoginOrRegister
+    } else {
+      // Fallback: Directly navigate to LoginPage if onTag is null
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(onTag: widget.onTag),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
             // sign up button
             MyButton(
               text: "Sign Up",
-              onTap: () {},
+              onTap: signUp, // Updated to call signUp function
             ),
 
             const SizedBox(height: 25),

@@ -12,8 +12,11 @@ class MyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
+    return InkWell(
+      onTap: onTap,
+      splashColor: Colors.white.withOpacity(0.3), // Hiệu ứng splash khi nhấn
+      highlightColor: Colors.transparent, // Loại bỏ highlight màu mặc định
+      borderRadius: BorderRadius.circular(8), // Giữ radius của container
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),

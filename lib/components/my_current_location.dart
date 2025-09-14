@@ -1,28 +1,45 @@
 import 'package:flutter/material.dart';
 
-class MyCurrentLocation extends StatelessWidget {
+class MyCurrentLocation extends StatefulWidget {
   const MyCurrentLocation({super.key});
 
+  @override
+  State<MyCurrentLocation> createState() => _MyCurrentLocationState();
+}
+
+class _MyCurrentLocationState extends State<MyCurrentLocation> {
+  String currentAddress = "231 Nguyen Van Cu, District 5, HCMC";
+
+  final TextEditingController _controller = TextEditingController();
+
   void openLocationSearchBox(BuildContext context) {
+    _controller.text = currentAddress; // gán địa chỉ hiện tại vào ô nhập
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Your location"),
-        content: const TextField(
-          decoration: InputDecoration(
+        content: TextField(
+          controller: _controller,
+          decoration: const InputDecoration(
             hintText: "Enter your location",
           ),
         ),
         actions: [
-          //cancel button
+          // cancel button
           MaterialButton(
             onPressed: () => Navigator.pop(context),
             child: const Text("Cancel"),
           ),
 
-          //save button
+          // save button
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              setState(() {
+                currentAddress = _controller.text; // cập nhật địa chỉ
+              });
+              Navigator.pop(context);
+            },
             child: const Text("Save"),
           ),
         ],
@@ -47,7 +64,7 @@ class MyCurrentLocation extends StatelessWidget {
               children: [
                 // address
                 Text(
-                  "231 Nguyen Van Cu, District 5, HCMC",
+                  currentAddress, // hiển thị địa chỉ được cập nhật
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.bold,
@@ -55,7 +72,7 @@ class MyCurrentLocation extends StatelessWidget {
                 ),
 
                 // drop down menu
-                Icon(Icons.keyboard_arrow_down_rounded),
+                const Icon(Icons.keyboard_arrow_down_rounded),
               ],
             ),
           ),

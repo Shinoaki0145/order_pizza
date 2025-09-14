@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_drawer_tile.dart';
 import '../pages/settings_page.dart';
+import '../auth/login_or_register.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -20,6 +21,7 @@ class MyDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: Divider(
@@ -33,12 +35,13 @@ class MyDrawer extends StatelessWidget {
             title: "H O M E",
             onTap: () => Navigator.pop(context),
           ),
+
           // settings list tile
           MyDrawerTile(
             icon: Icons.settings,
             title: "S E T T I N G S",
             onTap: () {
-              Navigator.pop(context);
+              Navigator.pop(context); // đóng drawer
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -54,7 +57,15 @@ class MyDrawer extends StatelessWidget {
           MyDrawerTile(
             icon: Icons.logout,
             title: "L O G O U T",
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginOrRegister(),
+                ),
+                    (route) => false,
+              );
+            },
           ),
 
           const SizedBox(height: 60),

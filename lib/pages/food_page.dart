@@ -123,11 +123,12 @@ class _FoodPageState extends State<FoodPage> {
                     ],
                   ),
                 ),
+                // Nút Add to cart giống nút login
                 MyButton(
                   text: 'Add to cart',
                   onTap: () => addToCart(widget.food, widget.selectedAddons),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
               ],
             ),
           ),
