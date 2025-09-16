@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/pages/cart_page.dart';
 
-class MySilverAppBar extends StatelessWidget {
+class MySliverAppBar extends StatelessWidget {
   final Widget title;
   final Widget child;
 
-  const MySilverAppBar({
+  const MySliverAppBar({
     super.key,
     required this.title,
     required this.child,

@@ -1,4 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:dio/dio.dart';
+
+class LocationNotifier extends ChangeNotifier {
+  double baseLat = 10.76314, baseLong = 106.6821889;
+  String _curLocation = "";
+  String _deliveryTime = "";
+  String get curLocation => _curLocation;
+  String get deliveryTime => _deliveryTime;
+
+  void updateLocation(String newLocation) {
+    _curLocation = newLocation;
+  }
+
+  Future<bool> getDeliveryTime() async{
+    double destLat, destLong;
+    try {
+      List<Location> locations = await locationFromAddress(_curLocation);
+      destLat = locations[0].latitude;
+      destLong = locations[0].longitude;
+    }
+    on NoResultFoundException {
+      return false;
+    }
+
+    const APIKEY = String.fromEnvironment('ORS_API_KEY', defaultValue: '');
+    try {
+      final postData = await Dio().post(
+          "https://api.openrouteservice.org/v2/matrix/cycling-regular",
+          data: {"locations":[[baseLong, baseLat],[destLong, destLat]]},
+          options: Options(
+              headers: {
+                "Authorization" : APIKEY,
+              }
+          )
+      );
+      _deliveryTime = (postData.data['durations'][0][1] / 60).toStringAsFixed(0);
+    }
+    on DioException {
+      return false;
+    }
+    return true;
+  }
+}
 
 class MyCurrentLocation extends StatefulWidget {
   const MyCurrentLocation({super.key});
@@ -8,7 +53,7 @@ class MyCurrentLocation extends StatefulWidget {
 }
 
 class _MyCurrentLocationState extends State<MyCurrentLocation> {
-  String currentAddress = "231 Nguyen Van Cu, District 5, HCMC";
+  String currentAddress = "";
 
   final TextEditingController _controller = TextEditingController();
 
@@ -34,11 +79,18 @@ class _MyCurrentLocationState extends State<MyCurrentLocation> {
 
           // save button
           MaterialButton(
-            onPressed: () {
+            onPressed: () async{
+              Navigator.pop(context);
               setState(() {
                 currentAddress = _controller.text; // cập nhật địa chỉ
               });
-              Navigator.pop(context);
+              final noti = context.read<LocationNotifier>();
+              noti.updateLocation(currentAddress);
+              if (!await noti.getDeliveryTime() && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Location unknown"))
+                );
+              }
             },
             child: const Text("Save"),
           ),

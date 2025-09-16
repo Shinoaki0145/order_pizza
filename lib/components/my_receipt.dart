@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/models/restaurant.dart';
+import 'package:order_pizza/components/my_current_location.dart';
 import 'package:provider/provider.dart';
 
 class MyReceit extends StatelessWidget {
@@ -29,7 +30,10 @@ class MyReceit extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text("Estimated delivery time: 30 minutes"),
+              Consumer<LocationNotifier>(
+                builder: (context, locationNoti, child) =>
+                  Text("Estimated delivery time: ${locationNoti.deliveryTime} minutes"),
+              ),
             ],
           ),
         ));
