@@ -208,6 +208,15 @@ class Restaurant extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeAddOn(CartItem item, Addon addon){
+    int index = _cart.indexOf(item);
+    if (index != -1) {
+      if (_cart[index].selectedAddons.remove(addon)) {
+        notifyListeners();
+      }
+    }
+  }
+
   // get total price
   double get totalPrice {
     double total = 0.0;
@@ -244,17 +253,18 @@ class Restaurant extends ChangeNotifier {
   */
 
   // generate a receipt
-  String displayCartReceipt() {
+  String displayCartReceipt(double shipFee) {
     final receipt = StringBuffer();
     final receiptData = {};
 
     receipt.writeln("Order summary");
     receipt.writeln("--------------");
 
+    final datetime = DateTime.now();
     String formattedDate =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(datetime);
     receipt.writeln(formattedDate);
-    receiptData['Date'] = formattedDate;
+    receiptData['DateTime'] = datetime;
     receipt.writeln("");
     receipt.writeln("--------------");
 
@@ -286,15 +296,19 @@ class Restaurant extends ChangeNotifier {
     receipt.writeln("--------------");
     receipt.writeln();
     receipt.writeln("Total Items: ${getTotalItemsInCart()}");
-    receipt.writeln("Total Price: ${_formatMoney(totalPrice)}");
+    receipt.writeln("Shipping Fee: \$$shipFee");
+    receipt.writeln("Total Price: ${_formatMoney(totalPrice + shipFee)}");
     receiptData['Total-Items'] = getTotalItemsInCart();
-    receiptData['Total-Price'] = totalPrice;
+    receiptData['Shipping Fee'] = shipFee;
+    receiptData['Total-Price'] = totalPrice + shipFee;
 
     if (FirebaseAuth.instance.currentUser != null) {
       final userId = FirebaseAuth.instance.currentUser!.uid;
-      FirebaseFirestore.instance.collection("receipts").doc(userId).update({
-        DateTime.now().millisecondsSinceEpoch.toRadixString(16) : receiptData,
-      });
+      final uploadData = {
+        DateTime.now().millisecondsSinceEpoch.toRadixString(16) : receiptData
+      };
+      final doc = FirebaseFirestore.instance.collection("receipts").doc(userId);
+      doc.set(uploadData, SetOptions(merge: true));
     }
 
     return receipt.toString();

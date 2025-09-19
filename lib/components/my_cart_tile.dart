@@ -95,13 +95,19 @@ class MyCartTile extends StatelessWidget {
                                       "\$${addon.price.toStringAsFixed(2)}",
                                       style: const TextStyle(fontSize: 12),
                                     ),
+                                    const SizedBox(width: 10),
+                                    Icon(
+                                      Icons.remove_circle
+                                    ),
                                   ],
                                 ),
                                 shape: StadiumBorder(
                                     side: BorderSide(
                                   color: Theme.of(context).colorScheme.primary,
                                 )),
-                                onSelected: (value) {},
+                                onSelected: (_) {
+                                  context.read<Restaurant>().removeAddOn(cartItem, addon);
+                                },
                                 backgroundColor:
                                     Theme.of(context).colorScheme.secondary,
                                 labelStyle: TextStyle(

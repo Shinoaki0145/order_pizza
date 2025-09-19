@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_button.dart';
 import 'package:order_pizza/components/my_cart_tile.dart';
+import 'package:order_pizza/components/my_current_location.dart';
 import 'package:order_pizza/models/restaurant.dart';
 import 'package:order_pizza/pages/payment_page.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +77,13 @@ class CartPage extends StatelessWidget {
             MyButton(
               text: "Go to checkout",
               onTap: () {
-                if (useCart.isNotEmpty) {
+                final currentLocation = context.read<LocationNotifier>().curLocation;
+                if (currentLocation.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Please select location"))
+                  );
+                }
+                if (useCart.isNotEmpty && currentLocation.isNotEmpty) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(

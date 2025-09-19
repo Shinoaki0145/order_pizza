@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_button.dart';
 import 'package:order_pizza/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:order_pizza/models/receipt_history.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -62,6 +64,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (!context.mounted) return;
+
+    context.read<ReceiptHistory>().fetchReceipts();
     Navigator.push(
       context,
       MaterialPageRoute(

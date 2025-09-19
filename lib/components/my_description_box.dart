@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:order_pizza/components/my_current_location.dart';
+import 'package:provider/provider.dart';
 
 class MyDescriptionBox extends StatelessWidget {
   const MyDescriptionBox({super.key});
@@ -29,7 +31,10 @@ class MyDescriptionBox extends StatelessWidget {
           children: [
             Column(
               children: [
-                Text("\n1Đ", style: myPrimaryTextStyle),
+                Consumer<LocationNotifier>(
+                  builder: (context, locationNoti, child) =>
+                    Text("\$${locationNoti.shipFee}")
+                ),
                 Text("Delivery fee", style: mySecondaryTextStyle),
               ],
             ),
@@ -37,7 +42,10 @@ class MyDescriptionBox extends StatelessWidget {
             // delivery time
             Column(
               children: [
-                Text("30-40 min", style: myPrimaryTextStyle),
+                Consumer<LocationNotifier>(
+                  builder: (context, locationNoti, child) =>
+                    Text("${locationNoti.deliveryTime} min", style: myPrimaryTextStyle),
+                ),
                 Text("Delivery time", style: mySecondaryTextStyle),
               ],
             ),

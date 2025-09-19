@@ -3,7 +3,7 @@ import 'package:order_pizza/components/my_current_location.dart';
 import 'package:order_pizza/components/my_description_box.dart';
 import 'package:order_pizza/components/my_drawer.dart';
 import 'package:order_pizza/components/my_food_title.dart';
-import 'package:order_pizza/components/my_silver_app_bar.dart';
+import 'package:order_pizza/components/my_sliver_app_bar.dart';
 import 'package:order_pizza/components/my_tab_bar.dart';
 import 'package:order_pizza/models/food.dart';
 import 'package:order_pizza/models/restaurant.dart';
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage>
       drawer: const MyDrawer(),
       body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                MySilverAppBar(
+                MySliverAppBar(
                   title: MyTabBar(tabController: _tabController),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
