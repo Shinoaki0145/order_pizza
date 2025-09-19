@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/auth/login_or_register.dart';
 import 'package:order_pizza/models/restaurant.dart';
+import 'package:order_pizza/models/receipt_history.dart';
 import 'package:order_pizza/themes/theme_provider.dart';
 import 'package:order_pizza/components/my_current_location.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => Restaurant()),
         ChangeNotifierProvider(create: (context) => LocationNotifier()),
+        ChangeNotifierProvider(create: (context) => ReceiptHistory()),
       ],
       child: const MyApp(),
     ),

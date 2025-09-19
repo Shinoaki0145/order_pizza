@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:order_pizza/components/my_current_location.dart';
 import 'package:order_pizza/components/my_drawer_tile.dart';
+import 'package:order_pizza/models/restaurant.dart';
 import '../pages/settings_page.dart';
 import '../auth/login_or_register.dart';
+import 'package:provider/provider.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -65,6 +68,8 @@ class MyDrawer extends StatelessWidget {
                 ),
                     (route) => false,
               );
+              context.read<Restaurant>().clearCart();
+              context.read<LocationNotifier>().clearDelivery();
             },
           ),
 

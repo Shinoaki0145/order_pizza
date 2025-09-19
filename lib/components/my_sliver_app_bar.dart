@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/pages/cart_page.dart';
+import 'package:order_pizza/pages/receipt_history_page.dart';
 
 class MySliverAppBar extends StatelessWidget {
   final Widget title;
@@ -19,6 +20,15 @@ class MySliverAppBar extends StatelessWidget {
       floating: false,
       pinned: true,
       actions: [
+        IconButton(
+          icon: const Icon(Icons.receipt_long),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReceiptHistoryPage())
+            );
+          }
+        ),
         IconButton(
           icon: const Icon(Icons.shopping_cart_outlined),
           onPressed: () {

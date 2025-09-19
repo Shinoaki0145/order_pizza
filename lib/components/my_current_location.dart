@@ -7,11 +7,29 @@ class LocationNotifier extends ChangeNotifier {
   double baseLat = 10.76314, baseLong = 106.6821889;
   String _curLocation = "";
   String _deliveryTime = "";
+  double _distance = 0;
   String get curLocation => _curLocation;
   String get deliveryTime => _deliveryTime;
+  double get shipFee => getShipFee();
 
   void updateLocation(String newLocation) {
     _curLocation = newLocation;
+  }
+
+  double getShipFee() {
+    if (_distance == 0) return 0;
+
+    double baseFee = 0.5;
+    double baseDist = 3;
+    if (_distance <= baseDist) return baseFee;
+
+    double dist = _distance - baseDist;
+    double fee = baseFee;
+    while (dist > 0) {
+      fee += .15;
+      dist -= 1;
+    }
+    return fee;
   }
 
   Future<bool> getDeliveryTime() async{
@@ -29,7 +47,11 @@ class LocationNotifier extends ChangeNotifier {
     try {
       final postData = await Dio().post(
           "https://api.openrouteservice.org/v2/matrix/cycling-regular",
-          data: {"locations":[[baseLong, baseLat],[destLong, destLat]]},
+          data: {
+            "locations": [[baseLong, baseLat],[destLong, destLat]],
+            "metrics": ["distance", "duration"],
+            "units": "km"
+          },
           options: Options(
               headers: {
                 "Authorization" : APIKEY,
@@ -37,11 +59,19 @@ class LocationNotifier extends ChangeNotifier {
           )
       );
       _deliveryTime = (postData.data['durations'][0][1] / 60).toStringAsFixed(0);
+      _distance = postData.data['distances'][0][1];
     }
     on DioException {
       return false;
     }
+    notifyListeners();
     return true;
+  }
+
+  void clearDelivery() {
+    _curLocation = "";
+    _deliveryTime = "";
+    _distance = 0;
   }
 }
 

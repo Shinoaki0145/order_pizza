@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_receipt.dart';
+import 'package:order_pizza/models/restaurant.dart';
+import 'package:order_pizza/components/my_current_location.dart';
+import 'package:order_pizza/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DeliveryProcessPage extends StatelessWidget {
   const DeliveryProcessPage({super.key});
@@ -11,11 +16,20 @@ class DeliveryProcessPage extends StatelessWidget {
         title: const Text("Delivery Process"),
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+        leading: BackButton(
+          onPressed: () {
+             Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (ctx) => HomePage(),), (route) => false
+            );
+             context.read<Restaurant>().clearCart();
+             context.read<LocationNotifier>().clearDelivery();
+          }
+        ),
       ),
       bottomNavigationBar: _buildBottomNavBar(context),
       body: const Column(
         children: [
-          MyReceit(),
+          MyReceipt(),
         ],
       ),
     );
@@ -74,7 +88,7 @@ class DeliveryProcessPage extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () => launchUrlString("sms:+84-0814313950"),
                   icon: const Icon(Icons.message),
                 ),
               ),
@@ -85,7 +99,7 @@ class DeliveryProcessPage extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () => launchUrlString("tel:+84-0814313950"),
                   icon: const Icon(Icons.phone),
                   color: Colors.green,
                 ),

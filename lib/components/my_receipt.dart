@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/models/restaurant.dart';
+import 'package:order_pizza/models/receipt_history.dart';
 import 'package:order_pizza/components/my_current_location.dart';
 import 'package:provider/provider.dart';
 
-class MyReceit extends StatelessWidget {
-  const MyReceit({super.key});
+class MyReceipt extends StatelessWidget {
+  const MyReceipt({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<ReceiptHistory>().fetchReceipts();
     return Padding(
         padding:
             const EdgeInsets.only(left: 25, right: 25, top: 50, bottom: 25),
@@ -24,10 +26,10 @@ class MyReceit extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: const EdgeInsets.all(25),
-                child: Consumer<Restaurant>(
-                  builder: (context, restaurant, child) =>
-                      Text(restaurant.displayCartReceipt()),
-                ),
+                child: Consumer<LocationNotifier>(
+                    builder: (ctx, locationNoti, c) =>
+                      Text(context.read<Restaurant>().displayCartReceipt(locationNoti.shipFee)),
+                )
               ),
               const SizedBox(height: 20),
               Consumer<LocationNotifier>(
