@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:order_pizza/components/my_receipt.dart';
 import 'package:order_pizza/models/restaurant.dart';
-import 'package:order_pizza/components/my_current_location.dart';
 import 'package:order_pizza/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -22,7 +21,6 @@ class DeliveryProcessPage extends StatelessWidget {
                 MaterialPageRoute(builder: (ctx) => HomePage(),), (route) => false
             );
              context.read<Restaurant>().clearCart();
-             context.read<LocationNotifier>().clearDelivery();
           }
         ),
       ),

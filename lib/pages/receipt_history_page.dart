@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:order_pizza/models/receipt_history.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ReceiptHistoryPage extends StatelessWidget{
   const ReceiptHistoryPage({super.key});
@@ -95,7 +96,71 @@ class ReceiptHistoryPage extends StatelessWidget{
                         content: SingleChildScrollView(
                           child: ListBody(
                             children: [
-                              Text("$receiptDetail")
+                              Text("$receiptDetail"),
+                              Text(""),
+                              Text(""),
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.surface,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(Icons.person),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Thien Nhan",
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.inversePrimary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Shipper",
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.surface,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () => launchUrlString("sms:+84-0814313950"),
+                                          icon: const Icon(Icons.message),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.surface,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () => launchUrlString("tel:+84-0814313950"),
+                                          icon: const Icon(Icons.phone),
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
                             ],
                           )
                         ),

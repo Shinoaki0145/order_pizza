@@ -208,6 +208,15 @@ class Restaurant extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeAddOn(CartItem item, Addon addon){
+    int index = _cart.indexOf(item);
+    if (index != -1) {
+      if (_cart[index].selectedAddons.remove(addon)) {
+        notifyListeners();
+      }
+    }
+  }
+
   // get total price
   double get totalPrice {
     double total = 0.0;

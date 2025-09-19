@@ -146,7 +146,7 @@ class _MyCurrentLocationState extends State<MyCurrentLocation> {
               children: [
                 // address
                 Text(
-                  currentAddress, // hiển thị địa chỉ được cập nhật
+                  context.read<LocationNotifier>().curLocation, // hiển thị địa chỉ được cập nhật
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.bold,
